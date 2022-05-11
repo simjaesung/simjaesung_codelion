@@ -37,6 +37,7 @@ dictionary for문 접근하는 방법!\
 set에서 랜덤 출력하는 방법은 다시 리스트로 바꾼후 random함수를 이용한다.\
 random.choice(list(set_lunch))
 
+
 ---
 ## 2. 이상형이 뭐에요 ?
 ## 질문 + 답변과 선후관계가 필요한 자료들은 dictionary에 담는 것이 best!!!!
