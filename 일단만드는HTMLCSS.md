@@ -20,4 +20,4 @@
 
 ## 7.line-height !!!! 줄간격~ 16px가 가장 보기 좋다
 
-## 8.rgba - red,green,blue,a(투명도)
+## 8.rgba - red,green,blue,a(투명도).
