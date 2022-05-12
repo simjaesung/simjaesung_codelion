@@ -193,3 +193,255 @@ print(result.dest,":",result.text)
 </code>
 
 # 메일 보내기
+## SMTP
+ - 간단하게 메일을 보내기위한 약속
+ - 우리가 평소에 이메일을 보내는 방식은 직접 전자메일에 접속하여 한번에 SMTP로 메일을 보냈지만<br>
+이번 파이썬 실습에서는 우리가 직접 메일을 이메일서버에 보낼것임
+- SMTP 서버를 이용해 우리가 원하는 곳으로 메일을 보낼 수 있다.
+- SMTP도 주소가있다! - Adderss, port
+
+- 외부 smtplib 라이브러리를 사용해야함
+
+## 1.SMTP 메일서버를 연결
+
+### 서버에 연결해주기
+<code>
+<pre>
+SMTP_SERVER = "smtp.gmail.com"
+SMTP_PORT = 465
+smtp = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
+</pre>
+</code>
+하지만 이는 출력시 보안문제 때문에 서버가 닫혀있다는 에러가 뜸<br>
+
+### SLL을 요구하는 서버에 접속하기위해서는 _SLL
+
+<code>
+<pre>
+smtp = smtplib.SMTP_SLL(SMTP_SERVER, SMTP_PORT)
+</pre>
+</code>
+
+
+## 2. SMTP 메일 서버에 로그인
+<code>
+<pre>
+smtp.login(id,password) #아이디 비밀번호가 파라미터
+</pre>
+</code>
+
+## 3. SMTP 메일 서버로 메일을 보낸다
+<code>
+<pre>
+smtp.send_mseeage(보낼 메시지)
+smtp.quit()
+</pre>
+</code>
+
+---
+
+## 보낼 메시지는? MINE
+- MIME 전자우편을 위한 인터넷 표준 포맷, SMTP서버가 우리의 말을 알아들을수있게
+
+### MIME형태의 메일 작성
+1. 이메일을 만든다<br><br>
+2. 이메일에 내용을 담는다
+<code>
+<pre>
+from email.message import EmailMessage
+message = EmailMessage()
+message.set_content("코드라이언 수업중입니다.")
+</pre>
+</code>
+
+
+3. 발신자,수신자 설정<br>
+    Header부분에 값을 지정
+<code>
+<pre>
+message["Subject"] = "이것은 제목입니다." #제목 
+message["From"] = "###@gmail.com" #발신자
+message["To"] = "###@gmail.com"  #수신자
+</pre>
+</code>
+
+---
+
+## 메일에 사진 첨부하기
+ - 파일 오픈의 파라미터가, rb wb ab! 
+    - b는 binary(컴퓨터가 읽기 편한문자, hpg,png....)
+
+<code>
+<pre>
+image = open("codelion.png","rb") #읽기형식으로 오픈
+print(image.read()) # 파일을 읽어서 출력
+</pre>
+</code>
+
+### open한 이미지를 image라고 읽겠다.
+<code>
+<pre>
+with open("codelion.png","rb") as image:
+    image_file = image.read()
+</pre>
+</code>
+
+### 파일의 타입을 읽어주는 외부모듈 imghbr
+<code>
+<pre>
+import imghdr
+image_type = imghdr.what('codelion',image_file)
+</pre>
+</code>
+
+### 텍스트가 아닌 파일을 첨부할때 사용하는 함수
+<code>
+<pre>
+#image #maintype #subtype:확장자
+message.add_attachment(image_file,maintype='image',subtype=image_type) 
+                                                #subtype에 위 imghbr에서 사용한 변수를 파라미터로
+</pre>
+</code>
+
+# 이메일 보내기
+
+## SMTP
+- 간단하게 메일을 보내기위한 약속
+
+- 우리가 평소에 이메일을 보내는 방식은 직접 전자메일에 접속하여 한번에 SMTP로 메일을 보냈지만
+이번 파이썬 실습에서는 우리가 직접 메일을 이메일서버에 보낼것임
+
+- SMTP 서버를 이용해 우리가 원하는 곳으로 메일을 보낼 수 있다.
+
+- SMTP도 주소가있다.Adderss, port
+
+- 외부 smtplib 라이브러리를 사용해야함
+
+## 1.SMTP 메일서버를 연결
+
+서버에 연결
+<code>
+<pre>
+SMTP_SERVER = "smtp.gmail.com"
+SMTP_PORT = 465
+smtp = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
+</pre>
+</code>
+
+출력시 보안문제 때문에 서버가 닫혀있다는 에러가 뜸
+<code>
+<pre>
+smtp = smtplib.SMTP_SLL(SMTP_SERVER, SMTP_PORT)
+</pre>
+</code>
+SLL을 요구하는 서버에 접속하기위해서는 _SLL
+ 
+
+
+## 2. SMTP 메일 서버에 로그인
+<code>
+<pre>
+smtp.login(id,password)
+#아이디 비밀번호가 파라미터
+</pre>
+</code>
+
+## 3. SMTP 메일 서버로 메일을 보낸다
+
+<code>
+<pre>
+smtp.send_mseeage(MIME로만든 메시지)
+smtp.quit()
+</pre>
+</code>
+
+## MIME 
+- 전자우편을 위한 인터넷 표준 포맷
+- SMTP서버가 우리의 말을 알아들을수있게
+
+### MIME형태의 메일 작성
+1. 이메일을 만든다
+2. 이메일에 내용을 담는다
+<code>
+<pre>
+from email.message import EmailMessage
+message = EmailMessage()
+message.set_content("코드라이언 수업중입니다.")
+</pre>
+</code>
+
+
+3. 발신자,수신자 설정
+- Header부분에 값을 지정
+- 제목 발신자 수신자
+<code>
+<pre>
+message["Subject"] = "이것은 제목입니다."
+message["From"] = "###@gmail.com"
+message["To"] = "###@gmail.com"
+</pre>
+</code>
+
+### 메일에 사진 첨부하기
+- rb wb ab, b는 binary(컴퓨터가 읽기 편한문자, hpg,png....)
+
+<code>
+<pre>
+# open() - codelion.png / rb
+image = open("codelion.png","rb")
+# 파일을 읽어서 출력해보세요. read()
+print(image.read())
+</pre>
+</code>
+
+
+<code>
+<pre>
+import imghdr
+
+with open("codelion.png","rb") as image:
+    image_file = image.read()
+
+image_type = imghdr.what('codelion',image_file) #파일의 타입 확인
+
+#텍스트가 아닌 파일을 첨부할때 사용하는 함수
+message.add_attachment(image_file,maintype='image',subtype=image_type)
+</pre>
+</code>
+
+
+
+## 정규표현식
+- 문자열이 특정 패턴을 알아내어 조건에 맞는지 판단해줌
+
+<code>
+<pre>
+[a-zA-Z0-9.+_-]+@[a-zA-Z0-9.+_-]+\.[a-zA-Z]{2,3}$
+[a-zA-Z0-9.+_-] - a부터z까지 ,A부터 Z까지, 0부터 9까지,.,+,_,- 가 1회이상 반복
+[a-zA-Z0-9.+_-] - a부터z까지 ,A부터 Z까지, 0부터 9까지 1회 이상 반복
+\.[a-zA-Z]{2,3}$ - a부터z까지 ,A부터 Z까지가 최소 2회 최대 3회 반복
+</pre>
+</code>
+
+<code>
+<pre>
+import re
+reg = "^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9.+_-]+\.[a-zA-Z]{2,3}$"
+print(re.match(reg,"codelion.example@gmail.com"))
+# 출력결과는 매치 or none
+</pre>
+</code>
+
+
+이메일 유효하면 메일 전송 아니면 보내지않음
+<code>
+<pre>
+def sendEmail(addr):
+    reg = "^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$"
+    if bool(re.match(reg,addr)):
+        smtp.send_message(message)
+        print("정상적으로 메일이 발송되었습니다.")
+    else:
+        print("유효한 이메일 주소가 아닙니다.")
+</pre>
+</code>
